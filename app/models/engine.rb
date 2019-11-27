@@ -31,6 +31,16 @@ class Engine
     list.join("\n")
   end
 
+  def self.versions(name)
+    versions = Gems.versions(name)
+
+    versions = versions.map do |version|
+      "#{version['built_at']} - #{version['number']}"
+    end
+
+    versions.join("/n")
+  end
+
   def self.info(name)
     info = Gems.info(name)
 

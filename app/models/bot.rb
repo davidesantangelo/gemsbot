@@ -55,6 +55,8 @@ class Bot
     chat_id = message.dig('chat', 'id')
     text = message['text']
 
+    last_bot_command = redis.get("lcmd:#{chat_id}")
+
     case text
     when '/start'
       redis.set("lcmd:#{chat_id}","/start")
@@ -79,28 +81,48 @@ class Bot
     when '/gems'
       redis.set("lcmd:#{chat_id}","/gems")
 
-      client.api.send_message(chat_id: chat_id, text: 'type "gems:<username>" and get all gems owned by specified username')
+      client.api.send_message(chat_id: chat_id, text: 'type author username and get all gems owned by specified username')
     when '/info'
       redis.set("lcmd:#{chat_id}","/info")
 
-      client.api.send_message(chat_id: chat_id, text: 'type "info:<name>" and get some basic information type')
+      client.api.send_message(chat_id: chat_id, text: 'type gem name and get some basic information type')
     when '/search'
       redis.set("lcmd:#{chat_id}","/search")
 
-      client.api.send_message(chat_id: chat_id, text: 'type "search:<name>" and get an array of active gems that match the query')
+      client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array of active gems that match the query')
+    when '/versions'
+      redis.set("lcmd:#{chat_id}","/versions")
+
+      client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array of version details')
     else
       if text.start_with?("/")
-        client.api.send_message(chat_id: chat_id, text: 'unknow command type /help')
+        client.api.send_message(chat_id: chat_id, text: 'Unrecognized command. Say what?')
         return
       end
 
-      case redis.get("lcmd:#{chat_id}")
+      case last_bot_command
       when '/info'
-        client.api.send_message(text: Engine.info(text), chat_id: chat_id, parse_mode: 'Markdown')
+        message = Engine.info(text) rescue 'This rubygem could not be found.'
+
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
       when '/search'
-        client.api.send_message(text: Engine.search(text), chat_id: chat_id, parse_mode: 'Markdown')
-      when 'gems'
-        client.api.send_message(text: Engine.gems(text), chat_id: chat_id, parse_mode: 'Markdown')
+        gems = Engine.search(text)
+
+        message = unless gems.present?
+          "Your search for - *#{text}* - did not match any gems."
+        else
+          gems
+        end
+
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
+      when '/gems'
+        message = Engine.gems(text) rescue 'Author not found.'
+
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
+      when '/versions'
+        message = Engine.versions(text) rescue 'This rubygem could not be found.'
+
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
       end
     end
   end
