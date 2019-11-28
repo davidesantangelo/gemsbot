@@ -10,6 +10,10 @@ class Bot
     client.api.get_me
   end
 
+  def self.chats_count
+    redis.keys.select { |k| k.start_with? 'bot:lcmd:'}.uniq.size
+  end
+
   # chats
 
   def self.get_chat(chat_id:)
@@ -59,45 +63,45 @@ class Bot
     chat_id = message.dig('chat', 'id')
     text = message['text']
 
-    last_bot_command = redis.get("lcmd:#{chat_id}")
+    last_bot_command = redis.get("bot:lcmd:#{chat_id}")
 
     case text
     when '/start'
-      redis.set("lcmd:#{chat_id}","/start")
+      redis.set("bot:lcmd:#{chat_id}","/start")
 
       client.api.send_message(text: 'Hello', chat_id: chat_id)
     when '/stop'
-      redis.set("lcmd:#{chat_id}","/stop")
+      redis.set("bot:lcmd:#{chat_id}","/stop")
 
       client.api.send_message(text: 'Bye', chat_id: chat_id)
     when '/latest'
-      redis.set("lcmd:#{chat_id}","/latest")
+      redis.set("bot:lcmd:#{chat_id}","/latest")
 
       client.api.send_message(text: "<b>Returns the 50 gems most recently added to RubyGems.org</b>\n\n#{Engine.latest}", chat_id: chat_id, parse_mode: 'HTML')
     when '/updated'
-      redis.set("lcmd:#{chat_id}","/updated")
+      redis.set("bot:lcmd:#{chat_id}","/updated")
 
       client.api.send_message(text: "<b>Returns the 50 most recently updated gems</b>\n\n#{Engine.just_updated}", chat_id: chat_id, parse_mode: 'HTML')
     when '/popular'
-      redis.set("lcmd:#{chat_id}","/popular")
+      redis.set("bot:lcmd:#{chat_id}","/popular")
 
       client.api.send_message(text: "<b>Returns an array containing the top 50 downloaded gem versions of all time.</b>\n\n#{Engine.most_downloaded}", chat_id: chat_id, parse_mode: 'HTML')
     when '/gems'
-      redis.set("lcmd:#{chat_id}","/gems")
+      redis.set("bot:lcmd:#{chat_id}","/gems")
 
-      client.api.send_message(chat_id: chat_id, text: 'type author username and get all gems owned by specified username')
+      client.api.send_message(chat_id: chat_id, text: 'type author username and get top 50 gems owned by specified username')
     when '/info'
-      redis.set("lcmd:#{chat_id}","/info")
+      redis.set("bot:lcmd:#{chat_id}","/info")
 
       client.api.send_message(chat_id: chat_id, text: 'type gem name and get some basic information type')
     when '/search'
-      redis.set("lcmd:#{chat_id}","/search")
+      redis.set("bot:lcmd:#{chat_id}","/search")
 
       client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array of active gems that match the query')
     when '/versions'
-      redis.set("lcmd:#{chat_id}","/versions")
+      redis.set("bot:lcmd:#{chat_id}","/versions")
 
-      client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array of version details')
+      client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array (latest 50) of version details')
     else
       if text.start_with?("/")
         client.api.send_message(chat_id: chat_id, text: 'Unrecognized command. Say what?')

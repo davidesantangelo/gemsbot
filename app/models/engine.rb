@@ -10,7 +10,9 @@ class Engine
   end
 
   def self.gems(name)
-    list_to_message(Gems.gems(name))
+    lists = Gems.gems(name).sort_by { |g| g['downloads'] }.reverse.take(50)
+
+    list_to_message(lists)
   end
 
   def self.latest
@@ -32,7 +34,7 @@ class Engine
   end
 
   def self.versions(name)
-    versions = Gems.versions(name)
+    versions = Gems.versions(name).take(50)
 
     versions = versions.map do |version|
       "<b>#{version['number']}</b> -> #{version['built_at'].to_time.to_formatted_s(:long)}"
@@ -46,7 +48,7 @@ class Engine
 
     "<b>name:</b> #{info['name']}\n" +
     "<b>author:</b> #{info['authors']}\n" +
-    "<b>downloads:</b> #{info['downloads']}\n" +
+    "<b>downloads:</b> #{number_to_human(info['downloads'])}\n" +
     "<b>info:</b> #{info['info']}\n" +
     "<b>version:</b> #{info['version']}\n" +
     "<b>homepage_uri:</b> #{info['homepage_uri']}\n" +
