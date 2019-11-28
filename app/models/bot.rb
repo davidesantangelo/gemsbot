@@ -1,6 +1,9 @@
 require 'telegram/bot'
 
 class Bot
+  include BotCommand
+
+  REDIS_KEY_LCMD_PREFIX = '#{REDIS_KEY_LCMD_PREFIX}'
 
   def self.redis
     Redis.new
@@ -11,7 +14,7 @@ class Bot
   end
 
   def self.chats_count
-    redis.keys.select { |k| k.start_with? 'bot:lcmd:'}.uniq.size
+    redis.keys.select { |k| k.start_with? REDIS_KEY_LCMD_PREFIX}.uniq.size
   end
 
   # chats
@@ -52,54 +55,54 @@ class Bot
 
   # info - type gem name and get some basic information type
   # search - type gem name and get an array of active gems that match the query
-  # gems - type author username and get all gems owned by specified username
+  # gems - type author username and get top 50 gems owned by specified username
   # updated - returns the 50 most recently updated gems
   # latest - returns the 50 gems most recently added to RubyGems.org
   # popular - returns an array containing the top 50 downloaded gem versions of all time
-  # versions - type gem name and get an array of version details
+  # versions - type gem name and get an array (latest 50) of version details
 
   def self.listener(payload:)
     message = payload['message']
     chat_id = message.dig('chat', 'id')
     text = message['text']
 
-    last_bot_command = redis.get("bot:lcmd:#{chat_id}")
+    last_bot_command = redis.get("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}")
 
     case text
-    when '/start'
-      redis.set("bot:lcmd:#{chat_id}","/start")
+    when BotCommand::START
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::START)
 
       client.api.send_message(text: 'Hello', chat_id: chat_id)
-    when '/stop'
-      redis.set("bot:lcmd:#{chat_id}","/stop")
+    when BotCommand::STOP
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::STOP)
 
       client.api.send_message(text: 'Bye', chat_id: chat_id)
-    when '/latest'
-      redis.set("bot:lcmd:#{chat_id}","/latest")
+    when BotCommand::LATEST
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::LATEST)
 
       client.api.send_message(text: "<b>Returns the 50 gems most recently added to RubyGems.org</b>\n\n#{Engine.latest}", chat_id: chat_id, parse_mode: 'HTML')
-    when '/updated'
-      redis.set("bot:lcmd:#{chat_id}","/updated")
+    when BotCommand::UPDATED
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::UPDATED)
 
       client.api.send_message(text: "<b>Returns the 50 most recently updated gems</b>\n\n#{Engine.just_updated}", chat_id: chat_id, parse_mode: 'HTML')
-    when '/popular'
-      redis.set("bot:lcmd:#{chat_id}","/popular")
+    when BotCommand::POPULAR
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::POPULAR)
 
       client.api.send_message(text: "<b>Returns an array containing the top 50 downloaded gem versions of all time.</b>\n\n#{Engine.most_downloaded}", chat_id: chat_id, parse_mode: 'HTML')
-    when '/gems'
-      redis.set("bot:lcmd:#{chat_id}","/gems")
+    when BotCommand::GEMS
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::GEMS)
 
       client.api.send_message(chat_id: chat_id, text: 'type author username and get top 50 gems owned by specified username')
-    when '/info'
-      redis.set("bot:lcmd:#{chat_id}","/info")
+    when BotCommand::INFO
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::INFO)
 
       client.api.send_message(chat_id: chat_id, text: 'type gem name and get some basic information type')
-    when '/search'
-      redis.set("bot:lcmd:#{chat_id}","/search")
+    when BotCommand::SEARCH
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::SEARCH)
 
       client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array of active gems that match the query')
-    when '/versions'
-      redis.set("bot:lcmd:#{chat_id}","/versions")
+    when BotCommand::VERSIONS
+      redis.set("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}", BotCommand::VERSIONS)
 
       client.api.send_message(chat_id: chat_id, text: 'type gem name and get an array (latest 50) of version details')
     else
@@ -109,11 +112,11 @@ class Bot
       end
 
       case last_bot_command
-      when '/info'
+      when BotCommand::INFO
         message = Engine.info(text) rescue 'This rubygem could not be found.'
 
         client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML', disable_web_page_preview: true)
-      when '/search'
+      when BotCommand::SEARCH
         gems = Engine.search(text)
 
         message = unless gems.present?
@@ -123,11 +126,11 @@ class Bot
         end
 
         client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML')
-      when '/gems'
+      when BotCommand::GEMS
         message = Engine.gems(text) rescue 'Author not found.'
 
         client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML')
-      when '/versions'
+      when BotCommand::VERSIONS
         message = Engine.versions(text) rescue 'This rubygem could not be found.'
 
         client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML')
