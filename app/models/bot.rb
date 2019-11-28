@@ -4,7 +4,7 @@ class Bot
   include BotCommand
   include BotText
 
-  REDIS_KEY_LCMD_PREFIX = '#{REDIS_KEY_LCMD_PREFIX}'
+  REDIS_KEY_LCMD_PREFIX = 'bot:lcmd:'
 
   def self.redis
     Redis.new
@@ -15,7 +15,7 @@ class Bot
   end
 
   def self.chats_count
-    redis.keys.select { |k| k.start_with? REDIS_KEY_LCMD_PREFIX}.uniq.size
+    redis.keys.select { |k| k.start_with? REDIS_KEY_LCMD_PREFIX }.uniq.size
   end
 
   # chats
@@ -74,8 +74,8 @@ class Bot
 
     last_bot_command = redis.get("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}")
 
-    unless BotCommand::COMMANDS.include?(text)
-      send_message(command: BotCommand::INVALID, attrs: { chat_id: chat_id, text: 'Unrecognized command. Say what?' })
+    if text.start_with?("/") && !BotCommand::COMMANDS.include?(text)
+      send_message(command: BotCommand::INVALID,  attrs: { chat_id: chat_id, text: 'Unrecognized command. Say what?' })
       return
     end 
 
