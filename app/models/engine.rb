@@ -3,7 +3,7 @@ include ActionView::Helpers::NumberHelper
 class Engine
   def self.list_to_message(list)
     list = list.map do |gem|
-      "[#{gem['name']}](#{gem['project_uri']})"
+      "<a href=\"#{gem['project_uri']}\">#{gem['name']}</a>"
     end
 
     list.join("\n")
@@ -25,7 +25,7 @@ class Engine
     gems = Gems.most_downloaded
 
     list = gems.map do |gem, downloads|
-      "[#{gem['full_name']}](https://rubygems.org/gems/#{gem['full_name']}) - #{number_to_human(downloads)}"
+      "<a href=\"https://rubygems.org/gems/#{gem['full_name']}\">#{gem['full_name']}</a> - #{number_to_human(downloads)}"
     end
 
     list.join("\n")
@@ -35,16 +35,23 @@ class Engine
     versions = Gems.versions(name)
 
     versions = versions.map do |version|
-      "#{version['built_at']} - #{version['number']}"
+      "<b>#{version['number']}</b> -> #{version['built_at'].to_time.to_formatted_s(:long)}"
     end
 
-    versions.join("/n")
+    versions.join("\n")
   end
 
   def self.info(name)
     info = Gems.info(name)
 
-    "*name:* #{info['name']}\n*author:* #{info['authors']}\n*downloads:* #{info['downloads']}\n*info:* #{info['info']}"
+    "<b>name:</b> #{info['name']}\n" +
+    "<b>author:</b> #{info['authors']}\n" +
+    "<b>downloads:</b> #{info['downloads']}\n" +
+    "<b>info:</b> #{info['info']}\n" +
+    "<b>version:</b> #{info['version']}\n" +
+    "<b>homepage_uri:</b> #{info['homepage_uri']}\n" +
+    "<b>project_uri:</b> #{info['project_uri']}\n" +
+    "<b>gem_uri:</b> #{info['gem_uri']}"
   end
 
   def self.search(name)

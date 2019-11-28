@@ -46,9 +46,13 @@ class Bot
 
   # messages
 
-  # updated - Returns the 50 most recently updated gems
-  # latest - Returns the 50 gems most recently added to RubyGems.org
-  # popular - Returns an array containing the top 50 downloaded gem versions of all time
+  # info - type gem name and get some basic information type
+  # search - type gem name and get an array of active gems that match the query
+  # gems - type author username and get all gems owned by specified username
+  # updated - returns the 50 most recently updated gems
+  # latest - returns the 50 gems most recently added to RubyGems.org
+  # popular - returns an array containing the top 50 downloaded gem versions of all time
+  # versions - type gem name and get an array of version details
 
   def self.listener(payload:)
     message = payload['message']
@@ -69,15 +73,15 @@ class Bot
     when '/latest'
       redis.set("lcmd:#{chat_id}","/latest")
 
-      client.api.send_message(text: "*Returns the 50 gems most recently added to RubyGems.org*\n\n#{Engine.latest}", chat_id: chat_id, parse_mode: 'Markdown')
+      client.api.send_message(text: "<b>Returns the 50 gems most recently added to RubyGems.org</b>\n\n#{Engine.latest}", chat_id: chat_id, parse_mode: 'HTML')
     when '/updated'
       redis.set("lcmd:#{chat_id}","/updated")
 
-      client.api.send_message(text: "*Returns the 50 most recently updated gems*\n\n#{Engine.just_updated}", chat_id: chat_id, parse_mode: 'Markdown')
+      client.api.send_message(text: "<b>Returns the 50 most recently updated gems</b>\n\n#{Engine.just_updated}", chat_id: chat_id, parse_mode: 'HTML')
     when '/popular'
       redis.set("lcmd:#{chat_id}","/popular")
 
-      client.api.send_message(text: "*Returns an array containing the top 50 downloaded gem versions of all time.*\n\n#{Engine.most_downloaded}", chat_id: chat_id, parse_mode: 'Markdown')
+      client.api.send_message(text: "<b>Returns an array containing the top 50 downloaded gem versions of all time.</b>\n\n#{Engine.most_downloaded}", chat_id: chat_id, parse_mode: 'HTML')
     when '/gems'
       redis.set("lcmd:#{chat_id}","/gems")
 
@@ -104,7 +108,7 @@ class Bot
       when '/info'
         message = Engine.info(text) rescue 'This rubygem could not be found.'
 
-        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML', disable_web_page_preview: true)
       when '/search'
         gems = Engine.search(text)
 
@@ -114,15 +118,15 @@ class Bot
           gems
         end
 
-        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML')
       when '/gems'
         message = Engine.gems(text) rescue 'Author not found.'
 
-        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML')
       when '/versions'
         message = Engine.versions(text) rescue 'This rubygem could not be found.'
 
-        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'Markdown')
+        client.api.send_message(text: message, chat_id: chat_id, parse_mode: 'HTML')
       end
     end
   end
