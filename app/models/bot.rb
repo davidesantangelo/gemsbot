@@ -7,7 +7,7 @@ class Bot
   REDIS_KEY_LCMD_PREFIX = 'bot:lcmd:'
 
   def self.redis
-    Redis.new
+    @redis ||= Redis.new
   end
 
   def self.get_me
