@@ -11,7 +11,9 @@ module BotText
     "/updated - returns the 50 most recently updated gems\n" +
     "/latest - returns the 50 gems most recently added to RubyGems.org\n" +
     "/popular - returns an array containing the top 50 downloaded gem versions of all time\n" +
-    "/versions - type gem name and get an array (latest 50) of version details"
+    "/versions - type gem name and get an array (latest 50) of version details" + 
+
+    "\n\ncreated by https://twitter.com/daviducolo"
 
   START = "RubyGems.org is the Ruby community’s gem hosting service. This Bot help you to manage API friendly :). Type '/help' and enjoi!"
 
