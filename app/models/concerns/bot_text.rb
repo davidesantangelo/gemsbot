@@ -13,8 +13,8 @@ module BotText
     "/popular - returns an array containing the top 50 downloaded gem versions of all time\n" +
     "/versions - type gem name and get an array (latest 50) of version details" + 
 
-    "\n\ncreated by https://twitter.com/daviducolo" +
-    "\n\nbuy me a coffee at https://www.buymeacoffee.com/582rhJH"
+    "\n\n\ncreated by https://twitter.com/daviducolo" +
+    "\nbmc at https://www.buymeacoffee.com/582rhJH"
 
   START = "RubyGems.org is the Ruby community’s gem hosting service. This Bot help you to manage API friendly :). Type '/help' and enjoi!"
 
