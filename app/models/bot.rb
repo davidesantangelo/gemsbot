@@ -74,7 +74,7 @@ class Bot
 
     last_bot_command = redis.get("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}")
 
-    if text.start_with?("/") && !BotCommand::COMMANDS.include?(text)
+    if text.present? && text.start_with?("/") && !BotCommand::COMMANDS.include?(text)
       send_message(command: BotCommand::INVALID,  attrs: { chat_id: chat_id, text: 'Unrecognized command. Say what?' })
       return
     end 
