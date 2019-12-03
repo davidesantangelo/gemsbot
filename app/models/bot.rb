@@ -108,7 +108,7 @@ class Bot
         gems = Engine.search(text)
 
         message = unless gems.present?
-          "Your search for - *#{text}* - did not match any gems."
+          "Your search for - <b>#{text}</b> - did not match any gems."
         else
           gems
         end
