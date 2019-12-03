@@ -16,7 +16,7 @@ module BotText
     "\n\n\nCreated by https://twitter.com/daviducolo" +
     "\nBMC at https://www.buymeacoffee.com/582rhJH"
 
-  START = "RubyGems.org is the Ruby community’s gem hosting service. This Bot help you to manage API friendly :). Type '/help' and enjoi!"
+  START = "RubyGems.org is the Ruby community’s gem hosting service. This Bot help you to manage API friendly :). Type '/help' and enjoy!!"
 
   STOP = "/stop"
   LATEST = "<b>Returns the 50 gems most recently added to RubyGems.org</b>\n\n#{Engine.latest}"
