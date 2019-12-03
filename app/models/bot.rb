@@ -83,7 +83,7 @@ class Bot
     when BotCommand::START
       send_message(command: BotCommand::START, attrs: { text: BotText::START, chat_id: chat_id })
     when BotCommand::HELP
-      send_message(command: BotCommand::HELP, attrs: { text: BotText::HELP, chat_id: chat_id })
+      send_message(command: BotCommand::HELP, attrs: { text: BotText::HELP, chat_id: chat_id, disable_web_page_preview: true })
     when BotCommand::LATEST
       send_message(command: BotCommand::LATEST, attrs: { text: BotText::LATEST, chat_id: chat_id, parse_mode: 'HTML' })
     when BotCommand::UPDATED
