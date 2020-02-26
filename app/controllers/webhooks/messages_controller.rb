@@ -1,6 +1,6 @@
 class Webhooks::MessagesController < ApplicationController
   before_action :verify_update
-  
+
   def create
     Bot.listener(payload: params)
 

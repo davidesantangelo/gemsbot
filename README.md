@@ -1,24 +1,17 @@
-# README
+== RubyG-Bot ( GemsBot on Telegram )
+Bot wrapper for the RubyGems.org API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+== TELEGRAM
 
-Things you may want to cover:
+https://t.me/rubyg_bot
 
-* Ruby version
+== License
+RubyG-Bot app is released under the MIT License.
 
-* System dependencies
+== Contributing
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. Fork it ( https://github.com/[my-github-username]/rubyg-bot/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request

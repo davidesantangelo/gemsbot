@@ -26,5 +26,4 @@ module BotText
   INFO = "type gem name and get some basic information about gem"
   SEARCH = "type gem name and get an array of active gems that match the query"
   VERSIONS = "type gem name and get an array (latest 50) of version details"
-
 end

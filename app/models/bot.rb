@@ -30,7 +30,7 @@ class Bot
 
   def self.get_chat_administrators(chat_id:)
     Hashie::Mash.new(client.api.get_chat_administrators(chat_id: chat_id))
-  end 
+  end
 
   # updates
 
@@ -74,10 +74,10 @@ class Bot
 
     last_bot_command = redis.get("#{REDIS_KEY_LCMD_PREFIX}#{chat_id}")
 
-    if text.present? && text.start_with?("/") && !BotCommand::COMMANDS.include?(text)
-      send_message(command: BotCommand::INVALID,  attrs: { chat_id: chat_id, text: 'Unrecognized command. Say what?' })
+    if text.present? && text.start_with?('/') && !BotCommand::COMMANDS.include?(text)
+      send_message(command: BotCommand::INVALID, attrs: { chat_id: chat_id, text: 'Unrecognized command. Say what?' })
       return
-    end 
+    end
 
     case text
     when BotCommand::START
@@ -103,25 +103,25 @@ class Bot
       when BotCommand::INFO
         message = Engine.info(text) rescue 'This rubygem could not be found.'
 
-        send_message(attrs: { text: message, chat_id: chat_id, disable_web_page_preview: true, parse_mode: 'HTML' } ) 
+        send_message(attrs: { text: message, chat_id: chat_id, disable_web_page_preview: true, parse_mode: 'HTML' })
       when BotCommand::SEARCH
         gems = Engine.search(text)
 
         message = unless gems.present?
-          "Your search for - <b>#{text}</b> - did not match any gems."
-        else
-          gems
-        end
+            "Your search for - <b>#{text}</b> - did not match any gems."
+          else
+            gems
+          end
 
-        send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' } ) 
+        send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' })
       when BotCommand::GEMS
         message = Engine.gems(text) rescue 'Author not found.'
 
-        send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' } )
+        send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' })
       when BotCommand::VERSIONS
         message = Engine.versions(text) rescue 'This rubygem could not be found.'
 
-        send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' } )
+        send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' })
       end
     end
   end
