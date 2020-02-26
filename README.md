@@ -1,14 +1,14 @@
 # RubyG-Bot ( GemsBot on Telegram )
 Bot wrapper for the RubyGems.org API
 
-# TELEGRAM
+## TELEGRAM
 
 https://t.me/rubyg_bot
 
-# License
+## License
 RubyG-Bot app is released under the MIT License.
 
-# Contributing
+## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/rubyg-bot/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
