@@ -1,6 +1,9 @@
 # RubyG-Bot ( GemsBot on Telegram )
 Bot wrapper for the RubyGems.org API
 
+
+<a href="https://ibb.co/KXzfyY4"><img src="https://i.ibb.co/jTZQ4d0/Screenshot-2020-02-26-at-10-29-59.png" alt="Screenshot-2020-02-26-at-10-29-59" border="0"></a>
+
 ## TELEGRAM
 
 https://t.me/rubyg_bot
