@@ -8,6 +8,14 @@ Bot wrapper for the RubyGems.org API
 
 https://t.me/rubyg_bot
 
+## Built With
+
+- [Ruby on Rails](https://github.com/rails/rails) &mdash; Our back end API is a Rails app. It responds to requests RESTfully in JSON.
+- [Redis](https://redis.io/) &mdash; We use Redis as a cache and for transient data.
+- [Gems](https://github.com/rubygems/gems) &mdash; Ruby wrapper for the RubyGems.org API https://rubygems.org
+
+Plus *lots* of Ruby Gems, a complete list of which is at [/master/Gemfile](https://github.com/davidesantangelo/feedi/blob/master/Gemfile).
+
 ## License
 RubyG-Bot app is released under the MIT License.
 
