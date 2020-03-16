@@ -1,4 +1,4 @@
-# RubyG-Bot ( GemsBot on Telegram )
+# GemsBot ( GemsBot on Telegram )
 Bot wrapper for the RubyGems.org API
 
 
@@ -17,11 +17,11 @@ https://t.me/rubyg_bot
 Plus *lots* of Ruby Gems, a complete list of which is at [/master/Gemfile](https://github.com/davidesantangelo/feedi/blob/master/Gemfile).
 
 ## License
-RubyG-Bot app is released under the MIT License.
+GemsBot app is released under the MIT License.
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/rubyg-bot/fork )
+1. Fork it ( https://github.com/[my-github-username]/gemsbot/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
