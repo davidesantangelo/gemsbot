@@ -46,14 +46,14 @@ class Engine
   def self.info(name)
     info = Gems.info(name)
 
-    "<b>name:</b> #{info['name']}\n" +
-    "<b>author:</b> #{info['authors']}\n" +
-    "<b>downloads:</b> #{number_to_human(info['downloads'])}\n" +
-    "<b>info:</b> #{info['info']}\n" +
-    "<b>version:</b> #{info['version']}\n" +
-    "<b>homepage_uri:</b> #{info['homepage_uri']}\n" +
-    "<b>project_uri:</b> #{info['project_uri']}\n" +
-    "<b>gem_uri:</b> #{info['gem_uri']}"
+    "<b>name:</b> #{info['name']}\n" \
+      "<b>author:</b> #{info['authors']}\n" \
+      "<b>downloads:</b> #{number_to_human(info['downloads'])}\n" \
+      "<b>info:</b> #{info['info']}\n" \
+      "<b>version:</b> #{info['version']}\n" \
+      "<b>homepage_uri:</b> #{info['homepage_uri']}\n" \
+      "<b>project_uri:</b> #{info['project_uri']}\n" \
+      "<b>gem_uri:</b> #{info['gem_uri']}"
   end
 
   def self.search(name)

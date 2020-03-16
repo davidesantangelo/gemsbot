@@ -10,7 +10,7 @@ class Bot
     @redis ||= Redis.new
   end
 
-  def self.get_me
+  def self.me
     client.api.get_me
   end
 
@@ -34,11 +34,11 @@ class Bot
 
   # updates
 
-  def self.get_webhook_info
+  def self.webhook_info
     client.api.get_webhook_info
   end
 
-  def self.set_webhook(url:)
+  def self.webhook(url:)
     client.api.set_webhook(url: url)
   end
 
@@ -101,25 +101,37 @@ class Bot
     else
       case last_bot_command
       when BotCommand::INFO
-        message = Engine.info(text) rescue 'This rubygem could not be found.'
+        message = begin
+                    Engine.info(text)
+                  rescue StandardError
+                    'This rubygem could not be found.'
+                  end
 
         send_message(attrs: { text: message, chat_id: chat_id, disable_web_page_preview: true, parse_mode: 'HTML' })
       when BotCommand::SEARCH
         gems = Engine.search(text)
 
-        message = unless gems.present?
-            "Your search for - <b>#{text}</b> - did not match any gems."
-          else
-            gems
-          end
+        message = if gems.present?
+                    gems
+                  else
+                    "Your search for - <b>#{text}</b> - did not match any gems."
+                  end
 
         send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' })
       when BotCommand::GEMS
-        message = Engine.gems(text) rescue 'Author not found.'
+        message = begin
+                    Engine.gems(text)
+                  rescue StandardError
+                    'Author not found.'
+                  end
 
         send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' })
       when BotCommand::VERSIONS
-        message = Engine.versions(text) rescue 'This rubygem could not be found.'
+        message = begin
+                    Engine.versions(text)
+                  rescue StandardError
+                    'This rubygem could not be found.'
+                  end
 
         send_message(attrs: { text: message, chat_id: chat_id, parse_mode: 'HTML' })
       end
