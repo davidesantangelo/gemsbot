@@ -10,7 +10,7 @@ class Webhooks::MessagesController < ApplicationController
   private
 
   def verify_update
-    return if params[:token] == RubygBot::Application.credentials.telegram_bot_token
+    return if params[:token] == GemsBot::Application.credentials.telegram_bot_token
     render json: {}, status: 401
   end
 end

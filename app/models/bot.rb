@@ -127,6 +127,6 @@ class Bot
   end
 
   def self.client
-    Telegram::Bot::Client.new(RubygBot::Application.credentials.telegram_bot_token)
+    Telegram::Bot::Client.new(GemsBot::Application.credentials.telegram_bot_token)
   end
 end
